@@ -306,6 +306,56 @@
         }
         .back-link:hover { color: var(--primary); }
 
+        /* Form dashboard */
+        .form-group-dash { display: flex; flex-direction: column; gap: 6px; }
+        .form-group-dash label { font-size: 0.8125rem; font-weight: 600; color: var(--gray-700); }
+        .dash-input {
+            padding: 10px 14px; border: 2px solid var(--gray-300); border-radius: 10px;
+            font-size: 0.875rem; background: var(--white); transition: border-color 0.2s;
+        }
+        .dash-input:focus { border-color: var(--primary); outline: none; }
+        /* Doc sections */
+        .doc-section-header {
+            padding: 14px 24px; background: var(--gray-50); font-weight: 700;
+            font-size: 0.875rem; border-top: 1px solid var(--gray-100);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .doc-row {
+            display: flex; align-items: center; gap: 16px; padding: 12px 24px;
+            border-top: 1px solid var(--gray-100); font-size: 0.85rem;
+        }
+        .doc-row:hover { background: var(--gray-50); }
+        .doc-icon { font-size: 1.1rem; width: 28px; text-align: center; }
+        .doc-info { flex: 1; }
+        .doc-name { font-weight: 600; }
+        .doc-desc { font-size: 0.75rem; color: var(--gray-500); margin-top: 2px; }
+        .doc-badge {
+            padding: 3px 10px; border-radius: 100px; font-size: 0.7rem; font-weight: 600;
+        }
+        .doc-badge.auto { background: #D1FAE5; color: #065F46; }
+        .doc-badge.manual { background: #FEF3C7; color: #92400E; }
+        .doc-badge.verifiable { background: #DBEAFE; color: #1E40AF; }
+        .doc-when { font-size: 0.7rem; color: var(--gray-500); white-space: nowrap; }
+        /* Timeline */
+        .tl-step {
+            display: flex; gap: 16px; padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .tl-step:last-child { border-bottom: none; }
+        .tl-num {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 800; flex-shrink: 0;
+            background: var(--primary); color: white;
+        }
+        .tl-num.auto { background: var(--success); }
+        .tl-content { flex: 1; }
+        .tl-phase { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--gray-500); letter-spacing: 0.05em; }
+        .tl-action { font-weight: 700; font-size: 0.875rem; margin: 2px 0; }
+        .tl-detail { font-size: 0.8rem; color: var(--gray-500); }
+        .tl-alert { font-size: 0.75rem; color: var(--danger); font-weight: 600; margin-top: 4px; }
+        .tl-delai { font-size: 0.7rem; color: var(--primary); font-weight: 600; white-space: nowrap; align-self: center; }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -521,80 +571,291 @@
                 </table>
             </div>
 
-            <!-- Upload section -->
-            <div class="upload-section">
-                <div class="upload-card" onclick="alert('Upload devis - Fonctionnalite a venir !')">
-                    <div class="upload-icon">📄</div>
-                    <div class="upload-title">Deposer un devis</div>
-                    <div class="upload-desc">Glissez-deposez ou cliquez pour uploader votre devis signe</div>
+            <!-- NOUVEAU DOSSIER AUTOMATISE -->
+            <div id="nouveauDossierSection" class="card" style="margin-top:32px;">
+                <div class="card-header">
+                    <span class="card-title">🤖 Creer un dossier automatise</span>
+                    <span style="font-size:0.8rem;color:var(--gray-500);">Le moteur genere automatiquement tous les documents reglementaires</span>
                 </div>
-                <div class="upload-card" onclick="alert('Upload photos - Fonctionnalite a venir !')">
-                    <div class="upload-icon">📸</div>
-                    <div class="upload-title">Photos fin de chantier</div>
-                    <div class="upload-desc">Envoyez vos photos de fin de travaux pour finaliser le dossier</div>
+                <div style="padding:24px;">
+                    <form id="formNouveauDossier" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div class="form-group-dash">
+                            <label>Type de travaux</label>
+                            <select id="nd_travaux" class="dash-input">
+                                <option value="pac_air_eau">PAC Air/Eau (Chauffage)</option>
+                                <option value="pac_air_air">PAC Air/Air (Clim reversible)</option>
+                                <option value="chaudiere_biomasse">Chaudiere biomasse</option>
+                                <option value="isolation_murs_ext">Isolation murs exterieur (ITE)</option>
+                                <option value="isolation_murs_int">Isolation murs interieur</option>
+                                <option value="isolation_combles">Isolation combles / toiture</option>
+                                <option value="panneaux_solaires_toiture">Panneaux photovoltaiques (toiture)</option>
+                                <option value="chauffe_eau_solaire">Chauffe-eau solaire</option>
+                                <option value="fenetres">Fenetres double/triple vitrage</option>
+                                <option value="vmc_double_flux">VMC double flux</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Type de logement</label>
+                            <select id="nd_logement" class="dash-input">
+                                <option value="maison">Maison individuelle</option>
+                                <option value="appartement">Appartement</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Surface (m²)</label>
+                            <input type="number" id="nd_surface" value="100" class="dash-input">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Zone climatique</label>
+                            <select id="nd_zone" class="dash-input">
+                                <option value="H1">H1 - Nord/Est</option>
+                                <option value="H2">H2 - Ouest</option>
+                                <option value="H3">H3 - Sud</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Profil revenus client</label>
+                            <select id="nd_revenus" class="dash-input">
+                                <option value="bleu">Bleu (tres modestes)</option>
+                                <option value="jaune">Jaune (modestes)</option>
+                                <option value="violet">Violet (intermediaires)</option>
+                                <option value="rose">Rose (superieurs)</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Statut proprietaire</label>
+                            <select id="nd_statut" class="dash-input">
+                                <option value="occupant">Proprietaire occupant</option>
+                                <option value="bailleur">Proprietaire bailleur</option>
+                            </select>
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Annee construction</label>
+                            <input type="number" id="nd_annee" value="1985" class="dash-input">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Nom du client</label>
+                            <input type="text" id="nd_nom" placeholder="Dupont" class="dash-input">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Prenom du client</label>
+                            <input type="text" id="nd_prenom" placeholder="Marie" class="dash-input">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Adresse des travaux</label>
+                            <input type="text" id="nd_adresse" placeholder="12 rue des Lilas" class="dash-input">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Code postal</label>
+                            <input type="text" id="nd_cp" placeholder="69001" class="dash-input">
+                        </div>
+                        <div class="form-group-dash">
+                            <label>Ville</label>
+                            <input type="text" id="nd_ville" placeholder="Lyon" class="dash-input">
+                        </div>
+                        <div style="grid-column:1/-1;display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+                            <button type="button" class="btn btn-primary" onclick="creerDossierAuto()" style="padding:14px 32px;font-size:0.95rem;">
+                                🤖 Generer le dossier automatiquement
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            <!-- Checklist -->
-            <div class="checklist-section">
-                <div class="checklist-card">
-                    <div class="checklist-title">📋 Checklist dossier - Sophie Durand (Isolation murs)</div>
-                    <div class="checklist">
-                        <div class="checklist-item done">
-                            <div class="check-icon done">✓</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">Devis signe par le client</div>
-                                <div class="checklist-hint">Recu le 08/03/2026</div>
-                            </div>
+            <!-- RESULTATS DU DOSSIER GENERE -->
+            <div id="dossierResultat" style="display:none;margin-top:32px;">
+                <!-- Alertes -->
+                <div id="dossierAlertes" style="margin-bottom:20px;"></div>
+
+                <!-- Resume financier -->
+                <div class="stats-grid" id="dossierStats"></div>
+
+                <!-- Documents par dossier -->
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">
+                        <span class="card-title">📋 Documents requis (generes par le moteur reglementaire)</span>
+                        <div style="display:flex;gap:8px;">
+                            <button class="btn btn-outline btn-sm" onclick="telechargerDocuments()">📥 Telecharger les docs auto</button>
                         </div>
-                        <div class="checklist-item done">
-                            <div class="check-icon done">✓</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">CNI du client</div>
-                                <div class="checklist-hint">Recu le 08/03/2026</div>
-                            </div>
-                        </div>
-                        <div class="checklist-item done">
-                            <div class="check-icon done">✓</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">Avis d'imposition N-1</div>
-                                <div class="checklist-hint">Recu le 09/03/2026</div>
-                            </div>
-                        </div>
-                        <div class="checklist-item missing">
-                            <div class="check-icon missing">!</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">Justificatif de domicile (-3 mois)</div>
-                                <div class="checklist-hint">Document manquant - relance envoyee au client le 12/03</div>
-                            </div>
-                            <span class="checklist-action">Renvoyer relance</span>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="check-icon pending">-</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">Attestation RGE a jour</div>
-                                <div class="checklist-hint">En attente - nous verifions votre certification</div>
-                            </div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="check-icon pending">-</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">Photos avant travaux</div>
-                                <div class="checklist-hint">A fournir avant le debut du chantier</div>
-                            </div>
-                            <span class="checklist-action">Uploader</span>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="check-icon pending">-</div>
-                            <div class="checklist-text">
-                                <div class="checklist-label">Facture finale + photos fin chantier</div>
-                                <div class="checklist-hint">A fournir apres les travaux</div>
-                            </div>
-                        </div>
+                    </div>
+                    <div id="dossierDocuments" style="padding:0;"></div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">
+                        <span class="card-title">📅 Timeline du dossier</span>
+                    </div>
+                    <div id="dossierTimeline" style="padding:24px;"></div>
+                </div>
+
+                <!-- Documents generes -->
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">
+                        <span class="card-title">📄 Apercu documents auto-generes</span>
+                        <button class="btn btn-outline btn-sm" onclick="togglePreview()">Afficher/Masquer</button>
+                    </div>
+                    <div id="dossierPreview" style="padding:24px;display:none;">
+                        <div id="previewContent" style="font-family:monospace;font-size:0.8rem;white-space:pre-wrap;background:#1a1f3d;color:#e0e0e0;padding:24px;border-radius:12px;overflow-x:auto;"></div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+    <script src="engine.js"></script>
+    <script>
+    let dernierDossier = null;
+
+    function creerDossierAuto() {
+        const params = {
+            type_travaux: document.getElementById('nd_travaux').value,
+            type_logement: document.getElementById('nd_logement').value,
+            surface: parseInt(document.getElementById('nd_surface').value) || 100,
+            zone_climatique: document.getElementById('nd_zone').value,
+            revenus: document.getElementById('nd_revenus').value,
+            statut_proprio: document.getElementById('nd_statut').value,
+            annee_construction: parseInt(document.getElementById('nd_annee').value) || 1985,
+            nom_client: document.getElementById('nd_nom').value || 'Client',
+            prenom_client: document.getElementById('nd_prenom').value || 'Nouveau',
+            adresse_travaux: document.getElementById('nd_adresse').value || '12 rue des Lilas',
+            code_postal: document.getElementById('nd_cp').value || '69001',
+            ville: document.getElementById('nd_ville').value || 'Lyon',
+            nom_artisan: 'Valentin Dupont',
+            siret_artisan: '123 456 789 00012',
+            rge_numero: 'RGE-2024-XXXXX',
+        };
+
+        try {
+            dernierDossier = RenoEngine.genererDossier(params);
+            afficherResultat(dernierDossier);
+        } catch (e) {
+            alert('Erreur: ' + e.message);
+        }
+    }
+
+    function afficherResultat(d) {
+        const section = document.getElementById('dossierResultat');
+        section.style.display = 'block';
+        section.scrollIntoView({ behavior: 'smooth' });
+
+        // Alertes
+        const alertesHtml = d.alertes.map(a => {
+            const cls = a.type === 'error' ? 'background:#FEE2E2;border:1px solid #FECACA;color:#991B1B'
+                : a.type === 'warning' ? 'background:#FEF3C7;border:1px solid #FDE68A;color:#92400E'
+                : 'background:#DBEAFE;border:1px solid #BFDBFE;color:#1E40AF';
+            const icon = a.type === 'error' ? '🔴' : a.type === 'warning' ? '🟡' : '🔵';
+            return `<div style="${cls};padding:12px 16px;border-radius:10px;font-size:0.85rem;margin-bottom:8px;">${icon} ${a.message}</div>`;
+        }).join('');
+        document.getElementById('dossierAlertes').innerHTML = alertesHtml;
+
+        // Stats
+        document.getElementById('dossierStats').innerHTML = `
+            <div class="stat-card">
+                <div class="stat-card-header"><span class="stat-card-label">Ref. dossier</span><div class="stat-card-icon blue">📁</div></div>
+                <div class="stat-card-value" style="font-size:1.1rem;">${d.reference}</div>
+                <div class="stat-card-change">${d.travaux.label}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header"><span class="stat-card-label">Total aides estimees</span><div class="stat-card-icon green">💰</div></div>
+                <div class="stat-card-value">${d.estimations.total_aides.toLocaleString('fr-FR')}€</div>
+                <div class="stat-card-change">CEE: ${d.estimations.prime_cee.toLocaleString('fr-FR')}€ + MPR: ${d.estimations.prime_mpr.toLocaleString('fr-FR')}€</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header"><span class="stat-card-label">Documents</span><div class="stat-card-icon purple">📄</div></div>
+                <div class="stat-card-value">${d.total_docs}</div>
+                <div class="stat-card-change">🤖 ${d.docs_auto} auto-generes | 📎 ${d.docs_manuels} a fournir</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header"><span class="stat-card-label">Reste a charge</span><div class="stat-card-icon orange">🏷️</div></div>
+                <div class="stat-card-value">${d.estimations.reste_a_charge.toLocaleString('fr-FR')}€</div>
+                <div class="stat-card-change">Couverture: ${d.estimations.taux_couverture}%</div>
+            </div>
+        `;
+
+        // Documents
+        const parDossier = {};
+        d.documents.forEach(doc => {
+            if (!parDossier[doc.dossier]) parDossier[doc.dossier] = [];
+            parDossier[doc.dossier].push(doc);
+        });
+
+        const dossierIcons = { CEE: '💰', MPR: '🏛️', MAIRIE: '🏗️' };
+        const dossierLabels = { CEE: 'Dossier CEE - Fiche ' + d.travaux.fiche_cee, MPR: "Dossier MaPrimeRenov'", MAIRIE: 'Declaration prealable en mairie' };
+        const whenLabels = { avant_travaux: 'Avant travaux', apres_travaux: 'Apres travaux', depot_demande: 'Depot demande', fin_travaux: 'Fin travaux' };
+        const sourceIcons = { beneficiaire: '👤', professionnel: '🔨', systeme: '🤖', diagnostiqueur: '🔍' };
+
+        let docsHtml = '';
+        Object.entries(parDossier).forEach(([dossier, docs]) => {
+            const autoCount = docs.filter(d => d.auto_generable).length;
+            docsHtml += `<div class="doc-section-header">${dossierIcons[dossier] || '📁'} ${dossierLabels[dossier] || dossier} <span style="margin-left:auto;font-weight:400;font-size:0.75rem;color:var(--gray-500)">${docs.length} docs dont ${autoCount} auto-generes</span></div>`;
+            docs.forEach(doc => {
+                const badge = doc.auto_generable ? '<span class="doc-badge auto">🤖 AUTO</span>'
+                    : doc.verifiable_auto ? '<span class="doc-badge verifiable">🔍 VERIF AUTO</span>'
+                    : '<span class="doc-badge manual">📎 A fournir</span>';
+                docsHtml += `
+                    <div class="doc-row">
+                        <span class="doc-icon">${sourceIcons[doc.source] || '📄'}</span>
+                        <div class="doc-info">
+                            <div class="doc-name">${doc.label}</div>
+                            <div class="doc-desc">${doc.description}</div>
+                        </div>
+                        ${badge}
+                        <span class="doc-when">${whenLabels[doc.quand] || doc.quand || ''}</span>
+                    </div>`;
+            });
+        });
+        document.getElementById('dossierDocuments').innerHTML = docsHtml;
+
+        // Timeline
+        let tlHtml = '';
+        d.timeline.forEach(step => {
+            tlHtml += `
+                <div class="tl-step">
+                    <div class="tl-num ${step.auto ? 'auto' : ''}">${step.auto ? '🤖' : step.ordre}</div>
+                    <div class="tl-content">
+                        <div class="tl-phase">${step.phase}</div>
+                        <div class="tl-action">${step.action}</div>
+                        <div class="tl-detail">${step.detail}</div>
+                        ${step.alerte ? `<div class="tl-alert">${step.alerte}</div>` : ''}
+                    </div>
+                    <span class="tl-delai">${step.delai}</span>
+                </div>`;
+        });
+        document.getElementById('dossierTimeline').innerHTML = tlHtml;
+
+        // Preview docs generes
+        const recap = RenoEngine.genererRecapDossier(d);
+        const attestation = RenoEngine.genererAttestationHonneur(d);
+        const cadre = RenoEngine.genererCadreContribution(d);
+        let preview = recap + '\n\n\n' + attestation + '\n\n\n' + cadre;
+        if (d.eligibilite.mairie) {
+            preview += '\n\n\n' + RenoEngine.genererNoticeDP(d);
+        }
+        document.getElementById('previewContent').textContent = preview;
+    }
+
+    function togglePreview() {
+        const el = document.getElementById('dossierPreview');
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function telechargerDocuments() {
+        if (!dernierDossier) return;
+        const d = dernierDossier;
+        let content = RenoEngine.genererRecapDossier(d);
+        content += '\n\n\n' + RenoEngine.genererAttestationHonneur(d);
+        content += '\n\n\n' + RenoEngine.genererCadreContribution(d);
+        if (d.eligibilite.mairie) {
+            content += '\n\n\n' + RenoEngine.genererNoticeDP(d);
+        }
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `RenoBoost_${d.reference}_documents.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    </script>
 </body>
 </html>
