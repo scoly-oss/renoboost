@@ -356,6 +356,10 @@
         .tl-alert { font-size: 0.75rem; color: var(--danger); font-weight: 600; margin-top: 4px; }
         .tl-delai { font-size: 0.7rem; color: var(--primary); font-weight: 600; white-space: nowrap; align-self: center; }
 
+        /* Views */
+        .view { display: none; }
+        .view.active { display: block; }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -375,23 +379,23 @@
         <aside class="sidebar">
             <div class="sidebar-logo">⚡ RenoBoost</div>
             <nav class="sidebar-nav">
-                <a href="#" class="sidebar-link active">
+                <a href="#" class="sidebar-link active" data-view="dashboard" onclick="switchView('dashboard',this)">
                     <span class="icon">📊</span> Tableau de bord
                 </a>
-                <a href="#" class="sidebar-link">
+                <a href="#" class="sidebar-link" data-view="dossiers" onclick="switchView('dossiers',this)">
                     <span class="icon">📁</span> Mes dossiers
                     <span class="sidebar-badge">3</span>
                 </a>
-                <a href="#" class="sidebar-link">
+                <a href="#" class="sidebar-link" data-view="upload" onclick="switchView('upload',this)">
                     <span class="icon">📤</span> Envoyer documents
                 </a>
-                <a href="#" class="sidebar-link">
+                <a href="#" class="sidebar-link" data-view="primes" onclick="switchView('primes',this)">
                     <span class="icon">💰</span> Mes primes
                 </a>
-                <a href="#" class="sidebar-link">
+                <a href="#" class="sidebar-link" data-view="mairie" onclick="switchView('mairie',this)">
                     <span class="icon">🏗️</span> Demandes mairie
                 </a>
-                <a href="#" class="sidebar-link">
+                <a href="#" class="sidebar-link" data-view="support" onclick="switchView('support',this)">
                     <span class="icon">📞</span> Support
                 </a>
             </nav>
@@ -408,12 +412,14 @@
         <main class="main">
             <a href="index.html" class="back-link">← Retour au site</a>
 
+            <!-- VIEW: DASHBOARD -->
+            <div class="view active" id="view-dashboard">
             <div class="page-header">
                 <div>
                     <h1>Bonjour Valentin 👋</h1>
                     <p>Voici l'etat de vos dossiers de primes en cours.</p>
                 </div>
-                <button class="btn btn-primary" onclick="document.querySelector('.upload-section').scrollIntoView({behavior:'smooth'})">
+                <button class="btn btn-primary" onclick="switchView('dossiers',document.querySelector('[data-view=dossiers]'))">
                     + Nouveau dossier
                 </button>
             </div>
@@ -700,10 +706,356 @@
                     </div>
                 </div>
             </div>
+            </div><!-- /view-dashboard -->
+
+            <!-- VIEW: DOSSIERS (Mes dossiers + creation) -->
+            <div class="view" id="view-dossiers">
+            <div class="page-header">
+                <div>
+                    <h1>📁 Mes dossiers</h1>
+                    <p>Retrouvez tous vos dossiers CEE, MaPrimeRenov' et demandes mairie.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Tous les dossiers</span>
+                    <div style="display:flex;gap:8px;">
+                        <select class="dash-input" style="padding:8px 12px;font-size:0.8rem;" id="filterDossier">
+                            <option value="all">Tous les statuts</option>
+                            <option value="done">Valides</option>
+                            <option value="progress">En cours</option>
+                            <option value="missing">Docs manquants</option>
+                        </select>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th>Client</th><th>Travaux</th><th>Prime</th><th>CEE</th><th>MPR</th><th>Mairie</th><th>Date</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">ML</div><div><div class="client-name">Martin Leroy</div><div class="client-sub">PAC Air/Eau - 95m²</div></div></div></td>
+                            <td>PAC Air/Eau</td><td class="amount">9 400€</td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Valide</span></td>
+                            <td><span class="status status-progress"><span class="status-dot"></span>En cours</span></td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Acceptee</span></td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">02/03/2026</td>
+                            <td><button class="btn btn-outline btn-sm">Voir</button></td>
+                        </tr>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">SD</div><div><div class="client-name">Sophie Durand</div><div class="client-sub">Isolation murs - 120m²</div></div></div></td>
+                            <td>Isolation murs</td><td class="amount">7 200€</td>
+                            <td><span class="status status-missing"><span class="status-dot"></span>Doc manquant</span></td>
+                            <td><span class="status status-pending"><span class="status-dot"></span>En attente</span></td>
+                            <td><span class="status status-pending"><span class="status-dot"></span>A deposer</span></td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">08/03/2026</td>
+                            <td><button class="btn btn-primary btn-sm">Completer</button></td>
+                        </tr>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">PB</div><div><div class="client-name">Pierre Bernard</div><div class="client-sub">Panneaux PV - 85m²</div></div></div></td>
+                            <td>Panneaux solaires</td><td class="amount">3 300€</td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Valide</span></td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Accepte</span></td>
+                            <td><span class="status status-progress"><span class="status-dot"></span>En instruction</span></td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">25/02/2026</td>
+                            <td><button class="btn btn-outline btn-sm">Voir</button></td>
+                        </tr>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">CM</div><div><div class="client-name">Claire Moreau</div><div class="client-sub">Chaudiere biomasse - 140m²</div></div></div></td>
+                            <td>Chaudiere biomasse</td><td class="amount">10 000€</td>
+                            <td><span class="status status-missing"><span class="status-dot"></span>Devis manquant</span></td>
+                            <td><span class="status status-pending"><span class="status-dot"></span>En attente</span></td>
+                            <td>-</td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">10/03/2026</td>
+                            <td><button class="btn btn-primary btn-sm">Completer</button></td>
+                        </tr>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">JR</div><div><div class="client-name">Jean Roux</div><div class="client-sub">PAC Air/Air - 110m²</div></div></div></td>
+                            <td>PAC Air/Air</td><td class="amount">762€</td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Valide</span></td>
+                            <td>-</td><td>-</td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">15/02/2026</td>
+                            <td><button class="btn btn-outline btn-sm">Voir</button></td>
+                        </tr>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">AF</div><div><div class="client-name">Anne Faure</div><div class="client-sub">VMC double flux - 90m²</div></div></div></td>
+                            <td>VMC double flux</td><td class="amount">4 500€</td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Valide</span></td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Verse</span></td>
+                            <td>-</td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">20/01/2026</td>
+                            <td><button class="btn btn-outline btn-sm">Voir</button></td>
+                        </tr>
+                        <tr>
+                            <td><div class="client-cell"><div class="client-avatar">LG</div><div><div class="client-name">Luc Gauthier</div><div class="client-sub">Fenetres - 8 unites</div></div></div></td>
+                            <td>Fenetres</td><td class="amount">1 600€</td>
+                            <td><span class="status status-progress"><span class="status-dot"></span>En cours</span></td>
+                            <td><span class="status status-pending"><span class="status-dot"></span>En attente</span></td>
+                            <td>-</td>
+                            <td style="font-size:0.8rem;color:var(--gray-500)">12/03/2026</td>
+                            <td><button class="btn btn-outline btn-sm">Voir</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div><!-- /view-dossiers -->
+
+            <!-- VIEW: UPLOAD -->
+            <div class="view" id="view-upload">
+            <div class="page-header">
+                <div>
+                    <h1>📤 Envoyer des documents</h1>
+                    <p>Deposez vos devis, factures et photos pour completer vos dossiers.</p>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                <div class="upload-card" onclick="alert('Upload devis - Fonctionnalite a venir !')">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-title">Devis signe</div>
+                    <div class="upload-desc">Glissez-deposez ou cliquez pour uploader un devis signe par le client</div>
+                </div>
+                <div class="upload-card" onclick="alert('Upload facture - Fonctionnalite a venir !')">
+                    <div class="upload-icon">🧾</div>
+                    <div class="upload-title">Facture finale</div>
+                    <div class="upload-desc">Facture conforme aux exigences CEE/MaPrimeRenov'</div>
+                </div>
+                <div class="upload-card" onclick="alert('Upload photos avant - Fonctionnalite a venir !')">
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-title">Photos avant travaux</div>
+                    <div class="upload-desc">Photos geolocalisees de l'installation existante</div>
+                </div>
+                <div class="upload-card" onclick="alert('Upload photos apres - Fonctionnalite a venir !')">
+                    <div class="upload-icon">✅</div>
+                    <div class="upload-title">Photos apres travaux</div>
+                    <div class="upload-desc">Photos de l'equipement installe avec etiquettes visibles</div>
+                </div>
+                <div class="upload-card" onclick="alert('Upload CNI - Fonctionnalite a venir !')">
+                    <div class="upload-icon">🪪</div>
+                    <div class="upload-title">Piece d'identite client</div>
+                    <div class="upload-desc">CNI ou passeport du beneficiaire</div>
+                </div>
+                <div class="upload-card" onclick="alert('Upload avis impot - Fonctionnalite a venir !')">
+                    <div class="upload-icon">📋</div>
+                    <div class="upload-title">Avis d'imposition client</div>
+                    <div class="upload-desc">Avis d'imposition N-1 pour determiner le profil de revenus</div>
+                </div>
+            </div>
+            <div class="notif-bar" style="margin-top:24px;">
+                <span>💡</span>
+                <div>Les documents uploades sont automatiquement associes au bon dossier grace a notre moteur de reconnaissance. Vous pouvez aussi les associer manuellement.</div>
+            </div>
+            </div><!-- /view-upload -->
+
+            <!-- VIEW: PRIMES -->
+            <div class="view" id="view-primes">
+            <div class="page-header">
+                <div>
+                    <h1>💰 Mes primes</h1>
+                    <p>Suivi de vos primes CEE et MaPrimeRenov'.</p>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-header"><span class="stat-card-label">Total obtenu</span><div class="stat-card-icon green">💰</div></div>
+                    <div class="stat-card-value">18 400€</div>
+                    <div class="stat-card-change">Depuis janvier 2026</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-header"><span class="stat-card-label">En attente versement</span><div class="stat-card-icon orange">⏳</div></div>
+                    <div class="stat-card-value">6 800€</div>
+                    <div class="stat-card-change">3 dossiers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-header"><span class="stat-card-label">En instruction</span><div class="stat-card-icon blue">📋</div></div>
+                    <div class="stat-card-value">12 600€</div>
+                    <div class="stat-card-change">4 dossiers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-header"><span class="stat-card-label">Frais RenoBoost</span><div class="stat-card-icon purple">🏷️</div></div>
+                    <div class="stat-card-value">350€</div>
+                    <div class="stat-card-change">7 dossiers x 50€</div>
+                </div>
+            </div>
+            <div class="card" style="margin-top:24px;">
+                <div class="card-header"><span class="card-title">Historique des versements</span></div>
+                <table>
+                    <thead><tr><th>Client</th><th>Type</th><th>Montant</th><th>Date versement</th><th>Statut</th></tr></thead>
+                    <tbody>
+                        <tr><td>Anne Faure</td><td>CEE + MPR</td><td class="amount">4 500€</td><td>28/01/2026</td><td><span class="status status-done"><span class="status-dot"></span>Verse</span></td></tr>
+                        <tr><td>Jean Roux</td><td>CEE</td><td class="amount">762€</td><td>20/02/2026</td><td><span class="status status-done"><span class="status-dot"></span>Verse</span></td></tr>
+                        <tr><td>Martin Leroy</td><td>CEE</td><td class="amount">4 400€</td><td>05/03/2026</td><td><span class="status status-done"><span class="status-dot"></span>Verse</span></td></tr>
+                        <tr><td>Martin Leroy</td><td>MPR</td><td class="amount">5 000€</td><td>-</td><td><span class="status status-progress"><span class="status-dot"></span>En cours ANAH</span></td></tr>
+                        <tr><td>Pierre Bernard</td><td>CEE + MPR</td><td class="amount">3 300€</td><td>-</td><td><span class="status status-progress"><span class="status-dot"></span>En attente</span></td></tr>
+                        <tr><td>Sophie Durand</td><td>CEE + MPR</td><td class="amount">7 200€</td><td>-</td><td><span class="status status-missing"><span class="status-dot"></span>Docs manquants</span></td></tr>
+                        <tr><td>Luc Gauthier</td><td>CEE + MPR</td><td class="amount">1 600€</td><td>-</td><td><span class="status status-pending"><span class="status-dot"></span>En instruction</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            </div><!-- /view-primes -->
+
+            <!-- VIEW: MAIRIE -->
+            <div class="view" id="view-mairie">
+            <div class="page-header">
+                <div>
+                    <h1>🏗️ Demandes en mairie</h1>
+                    <p>Declarations prealables et autorisations d'urbanisme pour vos chantiers.</p>
+                </div>
+            </div>
+            <div class="notif-bar">
+                <span>📌</span>
+                <div><strong>Rappel :</strong> Une declaration prealable est obligatoire pour : ITE (facades), panneaux solaires en toiture, PAC avec unite exterieure visible. Delai d'instruction : 1 mois (2 mois en zone ABF).</div>
+            </div>
+            <div class="card" style="margin-top:20px;">
+                <div class="card-header"><span class="card-title">Demandes en cours</span></div>
+                <table>
+                    <thead><tr><th>Client</th><th>Type</th><th>Motif</th><th>Depot</th><th>Delai</th><th>Statut</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>Martin Leroy</td>
+                            <td>Declaration prealable</td>
+                            <td style="font-size:0.8rem;">Unite ext. PAC Air/Eau (art. R*421-17 a)</td>
+                            <td>05/02/2026</td>
+                            <td>1 mois</td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Acceptee</span></td>
+                        </tr>
+                        <tr>
+                            <td>Pierre Bernard</td>
+                            <td>Declaration prealable</td>
+                            <td style="font-size:0.8rem;">Panneaux PV en toiture (art. R*421-17 a)</td>
+                            <td>28/02/2026</td>
+                            <td>2 mois (zone ABF)</td>
+                            <td><span class="status status-progress"><span class="status-dot"></span>En instruction</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sophie Durand</td>
+                            <td>Declaration prealable</td>
+                            <td style="font-size:0.8rem;">ITE - Isolation thermique exterieure (art. R*421-17 a)</td>
+                            <td>-</td>
+                            <td>1 mois</td>
+                            <td><span class="status status-pending"><span class="status-dot"></span>A deposer</span></td>
+                        </tr>
+                        <tr>
+                            <td>Claire Moreau</td>
+                            <td>Non requis</td>
+                            <td style="font-size:0.8rem;">Chaudiere biomasse - pas de modif aspect exterieur</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="status status-done"><span class="status-dot"></span>Non requis</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card" style="margin-top:24px;">
+                <div class="card-header"><span class="card-title">📄 Documents auto-generes pour la mairie</span></div>
+                <div style="padding:20px;">
+                    <p style="font-size:0.9rem;color:var(--gray-500);margin-bottom:16px;">Pour chaque dossier necessitant une DP, RenoBoost genere automatiquement :</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+                        <div style="background:var(--gray-50);padding:16px;border-radius:10px;text-align:center;">
+                            <div style="font-size:1.5rem;margin-bottom:8px;">📝</div>
+                            <div style="font-weight:700;font-size:0.85rem;">CERFA 13703</div>
+                            <div style="font-size:0.75rem;color:var(--gray-500);">Formulaire pre-rempli</div>
+                        </div>
+                        <div style="background:var(--gray-50);padding:16px;border-radius:10px;text-align:center;">
+                            <div style="font-size:1.5rem;margin-bottom:8px;">🗺️</div>
+                            <div style="font-weight:700;font-size:0.85rem;">DP1 - Plan situation</div>
+                            <div style="font-size:0.75rem;color:var(--gray-500);">Via API cadastre</div>
+                        </div>
+                        <div style="background:var(--gray-50);padding:16px;border-radius:10px;text-align:center;">
+                            <div style="font-size:1.5rem;margin-bottom:8px;">📋</div>
+                            <div style="font-weight:700;font-size:0.85rem;">DP8 - Notice</div>
+                            <div style="font-size:0.75rem;color:var(--gray-500);">Notice descriptive auto</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- /view-mairie -->
+
+            <!-- VIEW: SUPPORT -->
+            <div class="view" id="view-support">
+            <div class="page-header">
+                <div>
+                    <h1>📞 Support</h1>
+                    <p>Besoin d'aide ? Notre equipe est la pour vous.</p>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                <div class="card" style="padding:32px;">
+                    <div style="font-size:2rem;margin-bottom:12px;">📧</div>
+                    <h3 style="margin-bottom:8px;">Par email</h3>
+                    <p style="color:var(--gray-500);font-size:0.9rem;margin-bottom:16px;">Reponse sous 24h en jours ouvres.</p>
+                    <a href="mailto:support@renoboost.fr" class="btn btn-primary" style="text-decoration:none;">support@renoboost.fr</a>
+                </div>
+                <div class="card" style="padding:32px;">
+                    <div style="font-size:2rem;margin-bottom:12px;">📱</div>
+                    <h3 style="margin-bottom:8px;">Par telephone</h3>
+                    <p style="color:var(--gray-500);font-size:0.9rem;margin-bottom:16px;">Lundi au vendredi, 9h-18h.</p>
+                    <a href="tel:+33472692596" class="btn btn-outline" style="text-decoration:none;">04 72 69 25 96</a>
+                </div>
+                <div class="card" style="padding:32px;">
+                    <div style="font-size:2rem;margin-bottom:12px;">❓</div>
+                    <h3 style="margin-bottom:8px;">FAQ - Questions frequentes</h3>
+                    <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px;">
+                        <details style="background:var(--gray-50);padding:12px 16px;border-radius:10px;cursor:pointer;">
+                            <summary style="font-weight:600;font-size:0.875rem;">Combien de temps pour obtenir une prime CEE ?</summary>
+                            <p style="font-size:0.85rem;color:var(--gray-500);margin-top:8px;">En general 1 a 3 mois apres depot du dossier complet. Le delai depend du volume de dossiers au PNCEE.</p>
+                        </details>
+                        <details style="background:var(--gray-50);padding:12px 16px;border-radius:10px;cursor:pointer;">
+                            <summary style="font-weight:600;font-size:0.875rem;">Peut-on cumuler CEE et MaPrimeRenov' ?</summary>
+                            <p style="font-size:0.85rem;color:var(--gray-500);margin-top:8px;">Oui, les deux aides sont cumulables. La regle d'ecretement s'applique : le total des aides ne peut depasser 90% du cout pour les menages tres modestes.</p>
+                        </details>
+                        <details style="background:var(--gray-50);padding:12px 16px;border-radius:10px;cursor:pointer;">
+                            <summary style="font-weight:600;font-size:0.875rem;">Quand signer le cadre contribution CEE ?</summary>
+                            <p style="font-size:0.85rem;color:var(--gray-500);margin-top:8px;">AVANT la signature du devis. C'est la preuve du role actif et incitatif (RAI). Si signe apres, le dossier CEE est irrecevable.</p>
+                        </details>
+                        <details style="background:var(--gray-50);padding:12px 16px;border-radius:10px;cursor:pointer;">
+                            <summary style="font-weight:600;font-size:0.875rem;">La declaration prealable en mairie est-elle obligatoire ?</summary>
+                            <p style="font-size:0.85rem;color:var(--gray-500);margin-top:8px;">Oui pour les travaux modifiant l'aspect exterieur : ITE, panneaux solaires en toiture, PAC avec unite visible. Delai : 1 mois (2 en zone ABF).</p>
+                        </details>
+                    </div>
+                </div>
+                <div class="card" style="padding:32px;">
+                    <div style="font-size:2rem;margin-bottom:12px;">📚</div>
+                    <h3 style="margin-bottom:8px;">Ressources utiles</h3>
+                    <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+                        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gray-50);border-radius:10px;">
+                            <span>🏛️</span>
+                            <div>
+                                <div style="font-weight:600;font-size:0.85rem;">France Renov'</div>
+                                <div style="font-size:0.75rem;color:var(--gray-500);">france-renov.gouv.fr</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gray-50);border-radius:10px;">
+                            <span>📊</span>
+                            <div>
+                                <div style="font-weight:600;font-size:0.85rem;">Simulateur ANAH</div>
+                                <div style="font-size:0.75rem;color:var(--gray-500);">maprimerenov.gouv.fr</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gray-50);border-radius:10px;">
+                            <span>📜</span>
+                            <div>
+                                <div style="font-weight:600;font-size:0.85rem;">Fiches CEE (PNCEE)</div>
+                                <div style="font-size:0.75rem;color:var(--gray-500);">ecologie.gouv.fr</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- /view-support -->
+
         </main>
     </div>
     <script src="engine.js"></script>
     <script>
+    function switchView(viewName, linkEl) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        const target = document.getElementById('view-' + viewName);
+        if (target) target.classList.add('active');
+        if (linkEl) linkEl.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
     let dernierDossier = null;
 
     function creerDossierAuto() {
