@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RenoBoost - Simulateur d'aides a la renovation energetique</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">⚡</span> RenoBoost
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#simulateur">Simulateur</a>
+                <a href="#services">Services</a>
+                <a href="#comment-ca-marche">Comment ca marche</a>
+                <a href="#artisans">Artisans</a>
+                <a href="#agents">Agents immo</a>
+                <a href="#contact" class="btn btn-nav">Nous contacter</a>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <div class="hero-badge">Nouveau service independant</div>
+            <h1>Maximisez vos <span class="gradient-text">primes renovation</span> sans effort</h1>
+            <p class="hero-subtitle">
+                Nous gerons vos dossiers CEE & MaPrimeRenov' de A a Z.
+                Artisans, concentrez-vous sur votre metier — on s'occupe de l'administratif.
+            </p>
+            <div class="hero-actions">
+                <a href="#simulateur" class="btn btn-primary btn-lg">
+                    Simuler mes primes →
+                </a>
+                <a href="#comment-ca-marche" class="btn btn-outline btn-lg">
+                    Decouvrir le service
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">9 400€</span>
+                    <span class="stat-label">d'aides en moyenne</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">independant</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">0€</span>
+                    <span class="stat-label">d'avance de tresorerie</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Simulateur Section -->
+    <section class="section section-simulator" id="simulateur">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Simulateur</span>
+                <h2>Estimez vos primes en 2 minutes</h2>
+                <p>Calculez le montant des aides CEE et MaPrimeRenov' pour votre projet de renovation energetique.</p>
+            </div>
+
+            <div class="simulator-card">
+                <div class="simulator-grid">
+                    <!-- Left: Form -->
+                    <div class="sim-form">
+                        <div class="form-group">
+                            <label>Type de logement</label>
+                            <div class="radio-group">
+                                <label class="radio-card active" data-value="maison">
+                                    <input type="radio" name="type_logement" value="maison" checked>
+                                    <span class="radio-icon">🏠</span>
+                                    <span>Maison</span>
+                                </label>
+                                <label class="radio-card" data-value="appartement">
+                                    <input type="radio" name="type_logement" value="appartement">
+                                    <span class="radio-icon">🏢</span>
+                                    <span>Appartement</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="surface">Surface traitee (m²)</label>
+                            <input type="range" id="surface" min="20" max="200" value="100" class="range-input">
+                            <div class="range-labels">
+                                <span>20 m²</span>
+                                <span class="range-value" id="surfaceValue">100 m²</span>
+                                <span>200 m²</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Zone climatique</label>
+                            <div class="radio-group radio-group-3">
+                                <label class="radio-card active" data-value="H1">
+                                    <input type="radio" name="zone" value="H1" checked>
+                                    <span class="radio-icon">❄️</span>
+                                    <span>H1</span>
+                                    <small>Nord/Est</small>
+                                </label>
+                                <label class="radio-card" data-value="H2">
+                                    <input type="radio" name="zone" value="H2">
+                                    <span class="radio-icon">🌤️</span>
+                                    <span>H2</span>
+                                    <small>Ouest</small>
+                                </label>
+                                <label class="radio-card" data-value="H3">
+                                    <input type="radio" name="zone" value="H3">
+                                    <span class="radio-icon">☀️</span>
+                                    <span>H3</span>
+                                    <small>Sud</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Type de travaux</label>
+                            <select id="typeTravaux" class="select-input">
+                                <option value="pac_air_air">PAC Air/Air (Climatisation reversible)</option>
+                                <option value="pac_air_eau" selected>PAC Air/Eau (Chauffage)</option>
+                                <option value="chaudiere_biomasse">Chaudiere biomasse</option>
+                                <option value="isolation_murs">Isolation des murs</option>
+                                <option value="isolation_combles">Isolation des combles</option>
+                                <option value="panneaux_solaires">Panneaux photovoltaiques</option>
+                                <option value="chauffe_eau_solaire">Chauffe-eau solaire</option>
+                                <option value="fenetre">Fenetres double/triple vitrage</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Revenus du foyer</label>
+                            <div class="radio-group">
+                                <label class="radio-card" data-value="precaire">
+                                    <input type="radio" name="revenus" value="precaire">
+                                    <span class="radio-icon">🔵</span>
+                                    <span>Modestes</span>
+                                </label>
+                                <label class="radio-card active" data-value="classique">
+                                    <input type="radio" name="revenus" value="classique" checked>
+                                    <span class="radio-icon">🟢</span>
+                                    <span>Classiques</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-block" id="btnSimuler">
+                            Calculer mes aides →
+                        </button>
+                    </div>
+
+                    <!-- Right: Results -->
+                    <div class="sim-results" id="simResults">
+                        <div class="results-placeholder" id="resultsPlaceholder">
+                            <div class="placeholder-icon">📊</div>
+                            <p>Remplissez le formulaire et cliquez sur <strong>"Calculer mes aides"</strong> pour voir le resultat.</p>
+                        </div>
+                        <div class="results-content hidden" id="resultsContent">
+                            <h3>Estimation de vos aides</h3>
+                            <div class="result-row">
+                                <span class="result-label">💰 Prime CEE</span>
+                                <span class="result-value" id="resultCEE">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">🏛️ MaPrimeRenov'</span>
+                                <span class="result-value" id="resultMPR">-</span>
+                            </div>
+                            <div class="result-divider"></div>
+                            <div class="result-row result-total">
+                                <span class="result-label">Total des aides</span>
+                                <span class="result-value" id="resultTotal">-</span>
+                            </div>
+                            <div class="result-detail">
+                                <div class="detail-row">
+                                    <span>Cout estime des travaux</span>
+                                    <span id="resultCout">-</span>
+                                </div>
+                                <div class="detail-row highlight">
+                                    <span>Reste a charge estime</span>
+                                    <span id="resultReste">-</span>
+                                </div>
+                            </div>
+                            <div class="result-note">
+                                <small>⚠️ Estimation indicative. Le montant final depend du devis et des conditions d'eligibilite. Contactez-nous pour une etude personnalisee.</small>
+                            </div>
+                            <a href="#contact" class="btn btn-primary btn-block">
+                                Obtenir une etude precise →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section section-services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nos services</span>
+                <h2>Tout ce qu'on gere pour vous</h2>
+                <p>Un accompagnement complet, de la simulation a l'obtention des primes.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📋</div>
+                    <h3>Montage dossiers CEE</h3>
+                    <p>Constitution complete du dossier, collecte des documents, suivi jusqu'a l'obtention de la prime.</p>
+                    <span class="service-price">A partir de 50€ HT / dossier</span>
+                </div>
+                <div class="service-card featured">
+                    <div class="service-badge">Populaire</div>
+                    <div class="service-icon">🏛️</div>
+                    <h3>MaPrimeRenov'</h3>
+                    <p>Gestion integrale de la demande MaPrimeRenov' : simulation, depot, suivi et versement.</p>
+                    <span class="service-price">Forfait accompagnement</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏗️</div>
+                    <h3>Demandes en mairie</h3>
+                    <p>Declaration prealable de travaux, permis de construire, autorisations d'urbanisme.</p>
+                    <span class="service-price">A partir de 150€ / demande</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📐</div>
+                    <h3>Pack renovation complete</h3>
+                    <p>Audit energetique + simulation aides + montage dossiers + demandes mairie. Tout-en-un.</p>
+                    <span class="service-price">Forfait sur mesure</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comment ca marche -->
+    <section class="section section-steps" id="comment-ca-marche">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Processus</span>
+                <h2>Comment ca marche ?</h2>
+                <p>Un processus simple en 5 etapes pour obtenir vos primes sans vous prendre la tete.</p>
+            </div>
+            <div class="steps-timeline">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Simulation gratuite</h3>
+                        <p>Utilisez notre simulateur ou contactez-nous. On estime vos aides en quelques minutes.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Verification du devis</h3>
+                        <p>On verifie que votre devis est conforme aux exigences CEE/MaPrimeRenov' pour maximiser vos primes.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Montage du dossier</h3>
+                        <p>On collecte les documents, on constitue le dossier et on depose la demande pour vous.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Realisation des travaux</h3>
+                        <p>Vous realisez les travaux. On vous accompagne pour les photos et documents de fin de chantier.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Versement des primes</h3>
+                        <p>La prime est versee directement. Deduction possible sur la facture de vos clients.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Artisans -->
+    <section class="section section-audience" id="artisans">
+        <div class="container">
+            <div class="audience-grid">
+                <div class="audience-text">
+                    <span class="section-tag">Pour les artisans</span>
+                    <h2>Vous etes artisan RGE ?<br>On fait gagner du temps et de l'argent.</h2>
+                    <ul class="audience-list">
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Zero paperasse</strong>
+                                <p>On gere 100% de l'administratif CEE et MaPrimeRenov'</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Pas lie a un fournisseur</strong>
+                                <p>Contrairement a SAFIR/Rexel, travaillez avec qui vous voulez</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Plus de clients</strong>
+                                <p>Notre reseau d'agents immobiliers vous apporte des chantiers</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Demandes en mairie incluses</strong>
+                                <p>Facades, panneaux solaires, extensions... on gere les autorisations</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Devenir partenaire artisan →</a>
+                </div>
+                <div class="audience-visual">
+                    <div class="visual-card card-artisan">
+                        <div class="visual-stat">
+                            <span class="visual-number">2h</span>
+                            <span class="visual-label">economisees par dossier en moyenne</span>
+                        </div>
+                        <div class="visual-stat">
+                            <span class="visual-number">+30%</span>
+                            <span class="visual-label">de taux de conversion client</span>
+                        </div>
+                        <div class="visual-stat">
+                            <span class="visual-number">0€</span>
+                            <span class="visual-label">d'avance de tresorerie</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Agents Immo -->
+    <section class="section section-audience section-agents" id="agents">
+        <div class="container">
+            <div class="audience-grid reverse">
+                <div class="audience-visual">
+                    <div class="visual-card card-agent">
+                        <div class="visual-stat">
+                            <span class="visual-number">DPE</span>
+                            <span class="visual-label">→ Devis renovation complet</span>
+                        </div>
+                        <div class="visual-stat">
+                            <span class="visual-number">+</span>
+                            <span class="visual-label">Valeur patrimoniale du bien</span>
+                        </div>
+                        <div class="visual-stat">
+                            <span class="visual-number">6%</span>
+                            <span class="visual-label">de commission sur la vente</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="audience-text">
+                    <span class="section-tag">Pour les agents immobiliers</span>
+                    <h2>Transformez chaque DPE en opportunite de vente</h2>
+                    <ul class="audience-list">
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Un argument de vente puissant</strong>
+                                <p>Presentez un devis de renovation + aides deduites au futur acquereur</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Valorisez les passoires thermiques</strong>
+                                <p>Les biens DPE F/G deviennent des opportunites grace aux aides</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <div>
+                                <strong>Accompagnement cle en main</strong>
+                                <p>On gere tout : simulation, devis artisan, dossiers d'aides, demandes mairie</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Rejoindre le reseau →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparatif -->
+    <section class="section section-compare">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Pourquoi nous ?</span>
+                <h2>RenoBoost vs les solutions existantes</h2>
+            </div>
+            <div class="compare-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="highlight-col">RenoBoost</th>
+                            <th>SAFIR (Rexel)</th>
+                            <th>Faire seul</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Independant (pas lie a un fournisseur)</td>
+                            <td class="highlight-col">✅</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Montage dossier CEE</td>
+                            <td class="highlight-col">✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>MaPrimeRenov'</td>
+                            <td class="highlight-col">✅</td>
+                            <td>✅</td>
+                            <td>⚠️ Complexe</td>
+                        </tr>
+                        <tr>
+                            <td>Demandes en mairie</td>
+                            <td class="highlight-col">✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Reseau agents immobiliers</td>
+                            <td class="highlight-col">✅</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td>Tous types de travaux</td>
+                            <td class="highlight-col">✅</td>
+                            <td>⚠️ Limite</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Simulateur en ligne</td>
+                            <td class="highlight-col">✅</td>
+                            <td>✅</td>
+                            <td>❌</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section section-contact" id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <span class="section-tag">Contact</span>
+                    <h2>Pret a booster vos renovations ?</h2>
+                    <p>Que vous soyez artisan, agent immobilier ou particulier, on a une solution pour vous.</p>
+                    <div class="contact-cards">
+                        <div class="contact-card">
+                            <span class="contact-card-icon">🔨</span>
+                            <h4>Artisans</h4>
+                            <p>Inscrivez-vous et on gere vos dossiers de primes.</p>
+                        </div>
+                        <div class="contact-card">
+                            <span class="contact-card-icon">🏘️</span>
+                            <h4>Agents immobiliers</h4>
+                            <p>Rejoignez notre reseau d'apporteurs d'affaires.</p>
+                        </div>
+                        <div class="contact-card">
+                            <span class="contact-card-icon">👤</span>
+                            <h4>Particuliers</h4>
+                            <p>Faites estimer vos aides pour votre projet.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="profil">Vous etes</label>
+                            <select id="profil" required class="select-input">
+                                <option value="">Selectionnez votre profil</option>
+                                <option value="artisan">Artisan / Installateur</option>
+                                <option value="agent">Agent immobilier</option>
+                                <option value="particulier">Particulier</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nom">Nom</label>
+                                <input type="text" id="nom" required placeholder="Votre nom">
+                            </div>
+                            <div class="form-group">
+                                <label for="prenom">Prenom</label>
+                                <input type="text" id="prenom" required placeholder="Votre prenom">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="tel">Telephone</label>
+                            <input type="tel" id="tel" required placeholder="06 12 34 56 78">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message (optionnel)</label>
+                            <textarea id="message" rows="3" placeholder="Decrivez votre projet ou votre besoin..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Envoyer ma demande →
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">⚡</span> RenoBoost
+                    </a>
+                    <p>Service independant d'aide au financement et a la renovation energetique.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Services</h4>
+                    <a href="#simulateur">Simulateur de primes</a>
+                    <a href="#services">Montage dossiers CEE</a>
+                    <a href="#services">MaPrimeRenov'</a>
+                    <a href="#services">Demandes en mairie</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Partenaires</h4>
+                    <a href="#artisans">Artisans RGE</a>
+                    <a href="#agents">Agents immobiliers</a>
+                    <a href="#contact">Devenir partenaire</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <a href="mailto:contact@renoboost.fr">contact@renoboost.fr</a>
+                    <a href="#contact">Formulaire de contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RenoBoost. Tous droits reserves.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
